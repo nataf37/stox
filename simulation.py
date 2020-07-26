@@ -3,7 +3,7 @@ import csv
 CSV_FILE = "MSFT.csv"
 CASH = 3000
 CHANGE = 0
-EXIT_BARRIER = 0.98
+EXIT_BARRIER = 0.9
 BUY_PRECENTAGE = 1.01
 SELL_PRECENTAGE = 0.99
 AMOUNT_OF_STOCKS = 0
@@ -21,7 +21,8 @@ def trade():
     with open(CSV_FILE) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
-            current_value = float(row[3])
+            print ("Current date is: " + row[0])
+            current_value = float(row[1])
             if first_trade:
                 buy_stock(current_value)
                 first_trade = False
@@ -58,17 +59,26 @@ def sell_stock(current_value):
         AMOUNT_OF_STOCKS = 0
         print("After selling stocks,")
         print("Amount of cash:" + str(CASH))
+    else:
+        print ("Stocks already sold!")
+        print("Amount of cash:" + str(CASH))
 
     return()
 
 
 def test_stock_oscillation(current_value):
     oscillation = current_value/PURCHASED_STOCK_VALUE
+    print ("************************************")
+    print ("Current stock value: " + str(current_value))
+    print ("Purchased stock value: " + str(PURCHASED_STOCK_VALUE))
+    print ("Current stock oscillation is: " + str(oscillation))
+    print ("************************************")
     if oscillation <= EXIT_BARRIER:
+        print ("Reached Lower point! Selling all Stocks!!!")
         sell_stock(current_value)
         exit()
     else:
-        if oscillation <=  SELL_PRECENTAGE:
+        if oscillation <= SELL_PRECENTAGE:
             sell_stock(current_value)
         if oscillation >= BUY_PRECENTAGE:
             buy_stock(current_value)
