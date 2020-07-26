@@ -1,10 +1,13 @@
 import csv
+import pandas as pd
+import plotly.express as px
 
+#Main Values
 CSV_FILE = "MSFT.csv"
 CASH = 3000
 CHANGE = 0.0
 EXIT_BARRIER = 0.95
-GLOBAL_BUY_PRECENTAGE = 1.01
+GLOBAL_BUY_PRECENTAGE = 1.1
 GLOBAL_SELL_PRECENTAGE = 0.99
 AMOUNT_OF_STOCKS = 0
 COMISSION = 0.00065
@@ -30,6 +33,20 @@ def trade():
     if AMOUNT_OF_STOCKS != 0:
         sell_stock(current_value)
     print ("After all trading the amount of cash is: " + str(CASH))
+    draw_graph()
+
+def draw_graph():
+    f = open("MSFT_Graph.csv","w")
+    f.write("Date" + "," + "Value\n")
+    with open(CSV_FILE) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            f.write(row[0] + "," + row[1] + "\n")
+        f.close()
+    df = pd.read_csv("MSFT_Graph.csv")
+    fig = px.line(df, x = 'Date', y = 'Value', title='MSFT shares')
+    fig.show()
+
 
 def buy_stock(current_value):
     global CASH
